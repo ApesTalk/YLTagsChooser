@@ -6,6 +6,6 @@
 核心思想就是在- (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath方法中通过计算上一个cell的frame和当前cell的frame来判断将当前cell显示在什么位置。具体实现见代码。
 
 效果图：
-[](https://github.com/lqcjdx/YLTagsChooser/blob/master/YLTagsChooser.gif)
+![](https://github.com/lqcjdx/YLTagsChooser/blob/master/YLTagsChooser.gif)
 
 
