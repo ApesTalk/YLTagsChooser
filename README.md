@@ -11,7 +11,7 @@
 
 
 ## 2016-11-1更新
-一、修复数据源较多的情况下部分cell不显示的bug:[https://github.com/lqcjdx/YLTagsChooser/issues/1](标签很多的时候，中间cell会不显示，而且会出现很多空白的地方 #1)
+一、修复数据源较多的情况下部分cell不显示的bug:[标签很多的时候，中间cell会不显示，而且会出现很多空白的地方 #1](https://github.com/lqcjdx/YLTagsChooser/issues/1)
 
 二、实现可添加sectionheader的效果。
 
