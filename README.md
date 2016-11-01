@@ -7,7 +7,7 @@
 
 ## 效果图：
 
-![][https://github.com/lqcjdx/YLTagsChooser/blob/master/YLTagsChooser.gif]
+![](https://github.com/lqcjdx/YLTagsChooser/blob/master/YLTagsChooser.gif)
 
 
 ## 2016-11-1更新
