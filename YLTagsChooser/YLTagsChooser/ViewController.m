@@ -27,8 +27,8 @@
 
 - (IBAction)chooseTags:(id)sender {
     _textLabel.text = nil;
-    YLTagsChooser *chooser = [[YLTagsChooser alloc]initWithBottomHeight:300 maxSelectCount:5 delegate:self];
-    NSArray *testTags = @[@"篮球",
+    YLTagsChooser *chooser = [[YLTagsChooser alloc]initWithBottomHeight:400 maxSelectCount:5 delegate:self];
+    NSMutableArray *testTags = [@[@"篮球",
                           @"足球",
                           @"羽毛球",
                           @"乒乓球",
@@ -46,7 +46,6 @@
                           @"板球",
                           @"壁球",
                           @"沙壶",
-                          @"冰壶",
                           @"克郎球",
                           @"橄榄球",
                           @"曲棍球",
@@ -56,9 +55,36 @@
                           @"健身球",
                           @"门球",
                           @"弹球",
-                          ];
-    [chooser refreshWithTags:testTags];
+                          ]mutableCopy];
+    for(NSInteger i = 0; i < 40; i++){
+        if(i % 3 == 0){
+            [testTags addObject:[NSString stringWithFormat:@"测%li",i]];
+        }else if (i % 3 == 1){
+            [testTags addObject:[NSString stringWithFormat:@"测试%li",i]];
+        }else{
+            [testTags addObject:[NSString stringWithFormat:@"测试数据%li",i]];
+        }
+    }
+    for(NSInteger i = 0; i < 30; i++){
+        if(i % 3 == 0){
+            [testTags addObject:[NSString stringWithFormat:@"优%li",i]];
+        }else if (i % 3 == 1){
+            [testTags addObject:[NSString stringWithFormat:@"优蓝%li",i]];
+        }else{
+            [testTags addObject:[NSString stringWithFormat:@"优蓝网%li",i]];
+        }
+    }
+    for(NSInteger i = 0; i < 20; i++){
+        if(i % 3 == 0){
+            [testTags addObject:[NSString stringWithFormat:@"标签%li",i]];
+        }else if (i % 3 == 1){
+            [testTags addObject:[NSString stringWithFormat:@"Lambert%li",i]];
+        }else{
+            [testTags addObject:[NSString stringWithFormat:@"CodeNinja%li",i]];
+        }
+    }
     [chooser showInView:self.view];
+    [chooser refreshWithTags:testTags];
 }
 
 

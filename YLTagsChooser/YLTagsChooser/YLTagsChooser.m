@@ -9,6 +9,7 @@
 #import "YLTagsChooser.h"
 #import "NSArray+YLBoundsCheck.h"
 #import "YLWaterFlowLayout.h"
+#import "YLCollectionReusableView.h"
 
 #define HEXCOLOR(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
@@ -23,12 +24,13 @@ static CGFloat const kYGap = 10.f;
 
 @interface YLTagsChooser()<UICollectionViewDelegate,UICollectionViewDataSource,YLWaterFlowLayoutDelegate>
 {
-    NSArray         *orignalTags;
-    NSMutableArray  *selectedTags;
+    
 }
 @property (nonatomic,strong) UIView            *bottomView;
 @property (nonatomic,strong) UICollectionView  *myCollectionView;
 @property (nonatomic,strong) UIButton          *ensureBtn;
+@property (nonatomic,copy  ) NSArray           *orignalTags;
+@property (nonatomic,strong) NSMutableArray    *selectedTags;
 
 @end
 
@@ -38,27 +40,27 @@ static CGFloat const kYGap = 10.f;
                      maxSelectCount:(CGFloat)maxCount
                            delegate:(id<YLTagsChooserDelegate>)aDelegate
 {
-    if(self = [super init]){
-        selectedTags = [NSMutableArray array];
+    if(self = [super initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight)]){
+        _orignalTags = [NSArray array];
+        _selectedTags = [NSMutableArray array];
         self.alpha = 0.f;
-        self.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.5];
-        self.frame = CGRectMake(0, 0, kFrameWidth, kFrameHeight);
         self.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.5];
         
         self.bottomHeight = bHeight;
         self.maxSelectCount = maxCount;
         self.delegate = aDelegate;
         
-        [self addSubview:self.bottomView];
         [self.bottomView addSubview:self.myCollectionView];
         [self.bottomView addSubview:self.ensureBtn];
+        [self addSubview:self.bottomView];
     }
     return self;
 }
 
 -(void)refreshWithTags:(NSArray *)tags
 {
-    orignalTags = tags;
+    self.orignalTags = tags;
+    [_selectedTags removeAllObjects];
     [self.myCollectionView reloadData];
 }
 
@@ -78,10 +80,13 @@ static CGFloat const kYGap = 10.f;
         YLWaterFlowLayout *layout = [[YLWaterFlowLayout alloc]init];
         layout.rowHeight = 28.f;
         layout.delegate = self;
+        
         _myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, kYGap, kFrameWidth, _bottomHeight - 2 * kYGap - kBottomGap - kBottomBtnHeight)
                                               collectionViewLayout:layout];
         _myCollectionView.backgroundColor = [UIColor clearColor];
+        [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"YLCollectionReusableView"];
         [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:@"YLTagsCollectionViewCell"];
+        
         _myCollectionView.delegate = self;
         _myCollectionView.dataSource = self;
     }
@@ -108,25 +113,31 @@ static CGFloat const kYGap = 10.f;
 #pragma mark---UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return orignalTags.count;
+    return _orignalTags.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    YLTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"YLTagsCollectionViewCell"
+    static NSString *cellIdentifier = @"YLTagsCollectionViewCell";
+    YLTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier
                                                                                forIndexPath:indexPath];
-    NSString *str = [orignalTags yl_objectAtIndex:indexPath.row];
+    NSString *str = [_orignalTags yl_objectAtIndex:indexPath.row];
     [cell.btn setTitle:str forState:UIControlStateNormal];
-    cell.selected = [selectedTags containsObject:str];
+    cell.selected = [_selectedTags containsObject:str];
     return cell;
+}
+
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    YLCollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"YLCollectionReusableView" forIndexPath:indexPath];
+    return view;
 }
 
 #pragma mark---YLWaterFlowLayoutDelegate
 - (CGFloat)waterFlowLayout:(YLWaterFlowLayout *)layout widthAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *str = [orignalTags yl_objectAtIndex:indexPath.row];
-    
-    CGSize size = CGSizeMake(kFrameWidth - 20,MAXFLOAT);
+    NSString *str = [_orignalTags yl_objectAtIndex:indexPath.row];
+    CGSize size = CGSizeMake(kFrameWidth - 20,CGFLOAT_MAX);
     CGRect textRect = [str
                        boundingRectWithSize:size
                        options:NSStringDrawingUsesLineFragmentOrigin
@@ -142,12 +153,11 @@ static CGFloat const kYGap = 10.f;
     return YES;
 }
 
-
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *title = orignalTags[indexPath.row];
-    if(![selectedTags containsObject:title]){
-        if(selectedTags.count >= _maxSelectCount){
+    NSString *title = _orignalTags[indexPath.row];
+    if(![_selectedTags containsObject:title]){
+        if(_selectedTags.count >= _maxSelectCount){
             //提示用户
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示"
                                                            message:[NSString stringWithFormat:@"最多选择%li个",(long)_maxSelectCount]
@@ -156,14 +166,13 @@ static CGFloat const kYGap = 10.f;
                                                  otherButtonTitles:nil, nil];
             [alert show];
         }else{
-            [selectedTags addObject:title];
+            [_selectedTags addObject:title];
         }
     }else{
-        [selectedTags removeObject:title];
+        [_selectedTags removeObject:title];
     }
     [collectionView reloadData];
 }
-
 
 #pragma mark---touch
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -214,14 +223,12 @@ static CGFloat const kYGap = 10.f;
 -(void)ensureAction
 {
     if([_delegate respondsToSelector:@selector(tagsChooser:selectedTags:)]){
-        [_delegate tagsChooser:self selectedTags:selectedTags];
+        [_delegate tagsChooser:self selectedTags:_selectedTags];
     }
     [self dismiss];
 }
 
 @end
-
-
 
 #pragma mark---标签cell
 @implementation YLTagsCollectionViewCell
@@ -248,7 +255,7 @@ static CGFloat const kYGap = 10.f;
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    _btn.frame = CGRectMake(0, 0, self.contentView.frame.size.width, self.contentView.frame.size.height);
+    _btn.frame = CGRectMake(0, 0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
 }
 
 -(void)setSelected:(BOOL)selected

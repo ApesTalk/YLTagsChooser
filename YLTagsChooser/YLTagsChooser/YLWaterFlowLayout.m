@@ -19,43 +19,53 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.minimumInteritemSpacing = 5;//同一行不同cell间距
-        self.minimumLineSpacing = 5;//行间距
-        self.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
-        self.scrollDirection = UICollectionViewScrollDirectionVertical;
+        [self setupLayout];
         _originxArray = [NSMutableArray array];
         _originyArray = [NSMutableArray array];
     }
     return self;
 }
 
+- (void)setupLayout
+{
+    self.minimumInteritemSpacing = 5;//同一行不同cell间距
+    self.minimumLineSpacing = 5;//行间距
+    self.headerReferenceSize = CGSizeMake(0, 50);//设置section header 固定高度，如果需要的话
+    self.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+    self.scrollDirection = UICollectionViewScrollDirectionVertical;
+}
+
 #pragma mark - 重写父类的方法，实现瀑布流布局
 #pragma mark - 当尺寸有所变化时，重新刷新
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
-    return YES;
+    return NO;
 }
 
 - (void)prepareLayout {
     [super prepareLayout];
 }
 
-#pragma mark - 处理所有的Item的layoutAttributes
+#pragma mark - 所有cell和view的布局属性
+//sectionheader sectionfooter decorationview collectionviewcell的属性都会走这个方法
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
     NSArray *array = [super layoutAttributesForElementsInRect:rect];
-    NSMutableArray *mutArray = [NSMutableArray arrayWithCapacity:array.count];
     for(UICollectionViewLayoutAttributes *attrs in array){
-        UICollectionViewLayoutAttributes *theAttrs = [self layoutAttributesForItemAtIndexPath:attrs.indexPath];
-        [mutArray addObject:theAttrs];
+        //类型判断
+        if(attrs.representedElementCategory == UICollectionElementCategoryCell){
+            UICollectionViewLayoutAttributes *theAttrs = [self layoutAttributesForItemAtIndexPath:attrs.indexPath];
+            attrs.frame = theAttrs.frame;
+        }
     }
-    return mutArray;
+    return array;
 }
 
-#pragma mark - 处理单个的Item的layoutAttributes
+#pragma mark - 指定cell的布局属性
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     CGFloat x = self.sectionInset.left;
-    CGFloat y = self.sectionInset.top;
+    //如果有sectionheader需要加上sectionheader高度
+    CGFloat y = self.headerReferenceSize.height + self.sectionInset.top;
     //判断获得前一个cell的x和y
     NSInteger preRow = indexPath.row - 1;
     if(preRow >= 0){
@@ -88,14 +98,13 @@
 - (CGSize)collectionViewContentSize
 {
     CGFloat width = self.collectionView.frame.size.width;
-    
     __block CGFloat maxY = 0;
     [_originyArray enumerateObjectsUsingBlock:^(NSNumber *number, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([number floatValue] > maxY) {
-            maxY = [number floatValue];
+        CGFloat y = [number floatValue];
+        if (y > maxY) {
+            maxY = y;
         }
     }];
-
     return CGSizeMake(width, maxY + _rowHeight + self.sectionInset.bottom);
 }
 

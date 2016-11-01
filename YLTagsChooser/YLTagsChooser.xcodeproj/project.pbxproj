@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		45111D111DC752540051AA72 /* YLCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45111D101DC752540051AA72 /* YLCollectionReusableView.m */; };
 		457042321D0E580400128041 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042311D0E580400128041 /* main.m */; };
 		457042351D0E580400128041 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042341D0E580400128041 /* AppDelegate.m */; };
 		457042381D0E580400128041 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042371D0E580400128041 /* ViewController.m */; };
@@ -40,6 +41,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		45111D0F1DC752540051AA72 /* YLCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLCollectionReusableView.h; sourceTree = "<group>"; };
+		45111D101DC752540051AA72 /* YLCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLCollectionReusableView.m; sourceTree = "<group>"; };
 		4570422D1D0E580400128041 /* YLTagsChooser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLTagsChooser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		457042311D0E580400128041 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		457042331D0E580400128041 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -133,6 +136,8 @@
 				4570423E1D0E580400128041 /* LaunchScreen.storyboard */,
 				457042411D0E580400128041 /* Info.plist */,
 				457042301D0E580400128041 /* Supporting Files */,
+				45111D0F1DC752540051AA72 /* YLCollectionReusableView.h */,
+				45111D101DC752540051AA72 /* YLCollectionReusableView.m */,
 			);
 			path = YLTagsChooser;
 			sourceTree = "<group>";
@@ -296,6 +301,7 @@
 				457042381D0E580400128041 /* ViewController.m in Sources */,
 				457042651D0E5A0400128041 /* YLTagsChooser.m in Sources */,
 				457042351D0E580400128041 /* AppDelegate.m in Sources */,
+				45111D111DC752540051AA72 /* YLCollectionReusableView.m in Sources */,
 				4570426B1D0E5D6300128041 /* NSArray+YLBoundsCheck.m in Sources */,
 				457042681D0E5AC200128041 /* YLWaterFlowLayout.m in Sources */,
 				457042321D0E580400128041 /* main.m in Sources */,
@@ -526,6 +532,7 @@
 				4570425C1D0E580400128041 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4570425D1D0E580400128041 /* Build configuration list for PBXNativeTarget "YLTagsChooserTests" */ = {
 			isa = XCConfigurationList;
@@ -534,6 +541,7 @@
 				4570425F1D0E580400128041 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		457042601D0E580400128041 /* Build configuration list for PBXNativeTarget "YLTagsChooserUITests" */ = {
 			isa = XCConfigurationList;
@@ -542,6 +550,7 @@
 				457042621D0E580400128041 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
