@@ -10,12 +10,16 @@
 #import "NSArray+YLBoundsCheck.h"
 #import "YLWaterFlowLayout.h"
 #import "YLCollectionReusableView.h"
+#import "YLTag.h"
 
 #define HEXCOLOR(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 // 屏幕尺寸
 #define kFrameWidth [UIScreen mainScreen].bounds.size.width
 #define kFrameHeight [UIScreen mainScreen].bounds.size.height
+
+static NSString *sectionHeaderIdentifier = @"YLCollectionReusableView";
+static NSString *cellIdentifier = @"YLTagsCollectionViewCell";
 
 static NSTimeInterval const kSheetAnimationDuration = 0.25;
 static CGFloat const kBottomBtnHeight = 44.f;
@@ -57,10 +61,11 @@ static CGFloat const kYGap = 10.f;
     return self;
 }
 
--(void)refreshWithTags:(NSArray *)tags
+-(void)refreshWithTags:(NSArray *)tags selectedTags:(NSArray *)selectedTags
 {
     self.orignalTags = tags;
     [_selectedTags removeAllObjects];
+    [_selectedTags addObjectsFromArray:selectedTags];
     [self.myCollectionView reloadData];
 }
 
@@ -84,8 +89,8 @@ static CGFloat const kYGap = 10.f;
         _myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, kYGap, kFrameWidth, _bottomHeight - 2 * kYGap - kBottomGap - kBottomBtnHeight)
                                               collectionViewLayout:layout];
         _myCollectionView.backgroundColor = [UIColor clearColor];
-        [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"YLCollectionReusableView"];
-        [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:@"YLTagsCollectionViewCell"];
+        [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier];
+        [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier];
         
         _myCollectionView.delegate = self;
         _myCollectionView.dataSource = self;
@@ -118,27 +123,26 @@ static CGFloat const kYGap = 10.f;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"YLTagsCollectionViewCell";
     YLTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier
                                                                                forIndexPath:indexPath];
-    NSString *str = [_orignalTags yl_objectAtIndex:indexPath.row];
-    [cell.btn setTitle:str forState:UIControlStateNormal];
-    cell.selected = [_selectedTags containsObject:str];
+    YLTag *tag = [_orignalTags yl_objectAtIndex:indexPath.row];
+    [cell.btn setTitle:tag.name forState:UIControlStateNormal];
+    cell.selected = [_selectedTags containsObject:tag];
     return cell;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    YLCollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"YLCollectionReusableView" forIndexPath:indexPath];
+    YLCollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier forIndexPath:indexPath];
     return view;
 }
 
 #pragma mark---YLWaterFlowLayoutDelegate
 - (CGFloat)waterFlowLayout:(YLWaterFlowLayout *)layout widthAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *str = [_orignalTags yl_objectAtIndex:indexPath.row];
+    YLTag *tag = [_orignalTags yl_objectAtIndex:indexPath.row];
     CGSize size = CGSizeMake(kFrameWidth - 20,CGFLOAT_MAX);
-    CGRect textRect = [str
+    CGRect textRect = [tag.name
                        boundingRectWithSize:size
                        options:NSStringDrawingUsesLineFragmentOrigin
                        attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}
@@ -155,8 +159,8 @@ static CGFloat const kYGap = 10.f;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *title = _orignalTags[indexPath.row];
-    if(![_selectedTags containsObject:title]){
+    YLTag *tag = [_orignalTags yl_objectAtIndex:indexPath.row];
+    if(![_selectedTags containsObject:tag]){
         if(_selectedTags.count >= _maxSelectCount){
             //提示用户
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示"
@@ -166,10 +170,10 @@ static CGFloat const kYGap = 10.f;
                                                  otherButtonTitles:nil, nil];
             [alert show];
         }else{
-            [_selectedTags addObject:title];
+            [_selectedTags addObject:tag];
         }
     }else{
-        [_selectedTags removeObject:title];
+        [_selectedTags removeObject:tag];
     }
     [collectionView reloadData];
 }

@@ -13,15 +13,17 @@
 {
     
 }
+
 -(instancetype)initWithFrame:(CGRect)frame
 {
     if(self = [super initWithFrame:frame]){
         self.backgroundColor = [UIColor whiteColor];
         UILabel *textLabel = [[UILabel alloc]initWithFrame:self.bounds];
         textLabel.textAlignment = NSTextAlignmentCenter;
-        textLabel.text = @"This is section header";
+        textLabel.text = @"This is a section header";
         [self addSubview:textLabel];
     }
     return self;
 }
+
 @end

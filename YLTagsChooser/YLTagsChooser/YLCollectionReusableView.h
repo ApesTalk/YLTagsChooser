@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+// test UICollectionView section header
 @interface YLCollectionReusableView : UICollectionReusableView
 
 @end

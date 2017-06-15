@@ -38,7 +38,7 @@
 #pragma mark - 重写父类的方法，实现瀑布流布局
 #pragma mark - 当尺寸有所变化时，重新刷新
 - (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
-    return NO;
+    return NO;//此处返回YES会导致数据较多的情况下会有部分cell不显示的bug
 }
 
 - (void)prepareLayout {

@@ -12,14 +12,17 @@
 
 @interface YLTagsChooser : UIView
 @property(nonatomic,assign)id<YLTagsChooserDelegate>delegate;
-@property (nonatomic,assign) CGFloat    bottomHeight;   ///< 指定白色背景高度
-@property (nonatomic,assign) NSInteger  maxSelectCount; ///< 最多可选择数量
+@property(nonatomic,assign) CGFloat    bottomHeight;   ///< 指定白色背景高度
+@property(nonatomic,assign) NSInteger  maxSelectCount; ///< 最多可选择数量
 
-/**必须调用的初始化方法*/
+/**
+   必须调用的初始化方法
+   you must call this init method
+ */
 -(instancetype)initWithBottomHeight:(CGFloat)bHeight
                     maxSelectCount:(CGFloat)maxCount
                            delegate:(id<YLTagsChooserDelegate>)aDelegate;
--(void)refreshWithTags:(NSArray *)tags;
+-(void)refreshWithTags:(NSArray *)tags selectedTags:(NSArray *)selectedTags;
 - (void)showInView:(UIView *)view;
 - (void)dismiss;
 
