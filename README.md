@@ -21,21 +21,52 @@ Here I use UICollectionView to achieve a high degree of fixed, the width is not 
 
 二、实现可添加sectionheader的效果。(Show how to add a UICollectionReusableView.)
 
-因为有人反映自定义UICollectionViewFlowLayout的情况下，方法``- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath``不调用的问题。我也做了尝试，确实是很容易就造成这个方法不被调用。
+因为有人反映自定义UICollectionViewFlowLayout的情况下，方法
+
+```
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView    
+           viewForSupplementaryElementOfKind:(NSString *)kind 
+                                 atIndexPath:(NSIndexPath *)indexPath
+```
+
+不调用的问题。我也做了尝试，确实是很容易就造成这个方法不被调用。
 
 实现步骤总结如下：
 
-1、设置自定义UICollectionViewFlowLayout对象的headerReferenceSize属性或者实现UICollectionViewDelegateFlowLayout的``- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section``方法返回sectionheader的高度；
+1、设置自定义UICollectionViewFlowLayout对象的headerReferenceSize属性或者实现UICollectionViewDelegateFlowLayout的
 
-2、注册sectionheader:``[_myCollectionView registerClass:\[YLCollectionReusableView class]() forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"YLCollectionReusableView”]``;
+```
+- (CGSize)collectionView:(UICollectionView *)collectionView 
+                  layout:(UICollectionViewLayout*)collectionViewLayout 
+referenceSizeForHeaderInSection:(NSInteger)section
+```
 
-3、在方法``- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath中``返回自定义sectionheader;
+方法返回sectionheader的高度；
+
+2、注册sectionheader:
+
+```
+[_myCollectionView registerClass:[YLCollectionReusableView class]
+      forSupplementaryViewOfKind:UICollectionElementKindSectionHeader 
+             withReuseIdentifier:@"YLCollectionReusableView”]
+```
+
+
+3、在方法
+
+```
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView 
+           viewForSupplementaryElementOfKind:(NSString *)kind 
+                                 atIndexPath:(NSIndexPath *)indexPath
+```
+
+中返回自定义sectionheader;
 
 
 需要注意的是在``- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect``方法中应该加上判断当前UICollectionViewLayoutAttributes的representedElementCategory属性是否是UICollectionElementCategoryCell类型的，不能在这里改变了sectionheader的高度导致显示异常。因为所有view和cell的属性都会调用该方法。
 
 ## 2017-06-15 update
-一、新增默认选中的标签，下次进入页面会默认显示上次选中的标签。(fixed bug #2)
+一、新增默认选中的标签，下次进入页面会默认显示上次选中的标签。[Can we retain selected tag ?](https://github.com/lqcjdx/YLTagsChooser/issues/2)(fixed bug #2)
 
 可能同一个APP内会有多个页面会使用到标签选择器，并且每次选择的标签类型不太一样，所以建议将标签封装为一个对象：YLTag，每次显示YLTagsChooser的时候传入上次选中的值。
 
