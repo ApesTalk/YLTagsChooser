@@ -10,5 +10,5 @@
 
 // test UICollectionView section header
 @interface YLCollectionReusableView : UICollectionReusableView
-
+- (void)setTitle:(NSString *)title;
 @end

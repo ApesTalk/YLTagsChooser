@@ -20,13 +20,14 @@
 
 static NSString *sectionHeaderIdentifier = @"YLCollectionReusableView";
 static NSString *cellIdentifier = @"YLTagsCollectionViewCell";
+static NSString *cellIdentifier1 = @"YLTagsCollectionViewCell";
 
 static NSTimeInterval const kSheetAnimationDuration = 0.25;
 static CGFloat const kBottomBtnHeight = 44.f;
 static CGFloat const kBottomGap = 24.f;
 static CGFloat const kYGap = 10.f;
 
-@interface YLTagsChooser()<UICollectionViewDelegate,UICollectionViewDataSource,YLWaterFlowLayoutDelegate>
+@interface YLTagsChooser()<UICollectionViewDataSource,UICollectionViewDelegate,YLWaterFlowLayoutDelegate>
 {
     
 }
@@ -66,6 +67,11 @@ static CGFloat const kYGap = 10.f;
     self.orignalTags = tags;
     [_selectedTags removeAllObjects];
     [_selectedTags addObjectsFromArray:selectedTags];
+    for(NSArray *array in tags){
+        for(YLTag *tag in array){
+            tag.selected = [selectedTags containsObject:tag];
+        }
+    }
     [self.myCollectionView reloadData];
 }
 
@@ -83,7 +89,7 @@ static CGFloat const kYGap = 10.f;
 {
     if(!_myCollectionView){
         YLWaterFlowLayout *layout = [[YLWaterFlowLayout alloc]init];
-        layout.rowHeight = 28.f;
+        layout.rowHeight = 30.f;
         layout.delegate = self;
         
         _myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, kYGap, kFrameWidth, _bottomHeight - 2 * kYGap - kBottomGap - kBottomBtnHeight)
@@ -91,9 +97,10 @@ static CGFloat const kYGap = 10.f;
         _myCollectionView.backgroundColor = [UIColor clearColor];
         [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier];
         [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier];
-        
-        _myCollectionView.delegate = self;
+        [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier1];
+
         _myCollectionView.dataSource = self;
+        _myCollectionView.delegate = self;
     }
     return _myCollectionView;
 }
@@ -116,32 +123,43 @@ static CGFloat const kYGap = 10.f;
 }
 
 #pragma mark---UICollectionViewDataSource
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
     return _orignalTags.count;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    NSArray *sectionData = [_orignalTags yl_objectAtIndex:section];
+    if([sectionData isKindOfClass:[NSArray class]]){
+        return sectionData.count;
+    }
+    return 0;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     YLTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier
                                                                                forIndexPath:indexPath];
-    YLTag *tag = [_orignalTags yl_objectAtIndex:indexPath.row];
-    [cell.btn setTitle:tag.name forState:UIControlStateNormal];
-    cell.selected = [_selectedTags containsObject:tag];
+    NSArray *sectionData = [_orignalTags yl_objectAtIndex:indexPath.section];
+    YLTag *tag = [sectionData yl_objectAtIndex:indexPath.row];
+    [cell refreshWithObject:tag];
     return cell;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    YLCollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier forIndexPath:indexPath];
-    return view;
+    YLCollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier forIndexPath:indexPath];
+    [header setTitle:[NSString stringWithFormat:@"第%li个分区",indexPath.section]];
+    return header;
 }
 
 #pragma mark---YLWaterFlowLayoutDelegate
 - (CGFloat)waterFlowLayout:(YLWaterFlowLayout *)layout widthAtIndexPath:(NSIndexPath *)indexPath
 {
-    YLTag *tag = [_orignalTags yl_objectAtIndex:indexPath.row];
-    CGSize size = CGSizeMake(kFrameWidth - 20,CGFLOAT_MAX);
+    NSArray *sectionData = [_orignalTags yl_objectAtIndex:indexPath.section];
+    YLTag *tag = [sectionData yl_objectAtIndex:indexPath.row];
+    CGSize size = CGSizeMake(kFrameWidth - layout.sectionInset.left - layout.sectionInset.right,CGFLOAT_MAX);
     CGRect textRect = [tag.name
                        boundingRectWithSize:size
                        options:NSStringDrawingUsesLineFragmentOrigin
@@ -159,7 +177,8 @@ static CGFloat const kYGap = 10.f;
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    YLTag *tag = [_orignalTags yl_objectAtIndex:indexPath.row];
+    NSArray *sectionData = [_orignalTags yl_objectAtIndex:indexPath.section];
+    YLTag *tag = [sectionData yl_objectAtIndex:indexPath.row];
     if(![_selectedTags containsObject:tag]){
         if(_selectedTags.count >= _maxSelectCount){
             //提示用户
@@ -170,12 +189,14 @@ static CGFloat const kYGap = 10.f;
                                                  otherButtonTitles:nil, nil];
             [alert show];
         }else{
+            tag.selected = YES;
             [_selectedTags addObject:tag];
         }
     }else{
+        tag.selected = NO;
         [_selectedTags removeObject:tag];
     }
-    [collectionView reloadData];
+    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
 #pragma mark---touch
@@ -240,40 +261,56 @@ static CGFloat const kYGap = 10.f;
 {
     if(self = [super initWithFrame:frame]){
         self.backgroundColor = [UIColor clearColor];
-        _btn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _textLabel = [[UILabel alloc]init];
         //此处可以根据需要自己使用自动布局代码实现
-        _btn.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
-        _btn.backgroundColor = [UIColor whiteColor];
-        _btn.titleLabel.font = [UIFont systemFontOfSize:14];
-        _btn.layer.borderWidth = 1.f;
-        _btn.layer.cornerRadius = frame.size.height/2.0;
-        _btn.layer.masksToBounds = YES;
-        [_btn setTitleColor:HEXCOLOR(0x666666) forState:UIControlStateNormal];
-        _btn.layer.borderColor = HEXCOLOR(0xdddddd).CGColor;
-        _btn.userInteractionEnabled = NO;
-        [self.contentView addSubview:_btn];
+        _textLabel.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+        _textLabel.backgroundColor = [UIColor whiteColor];
+        _textLabel.font = [UIFont systemFontOfSize:14];
+        _textLabel.layer.borderWidth = 1.f;
+        _textLabel.layer.cornerRadius = frame.size.height * 0.5;
+        _textLabel.layer.masksToBounds = YES;
+        _textLabel.textColor = HEXCOLOR(0x666666);
+        _textLabel.textAlignment = NSTextAlignmentCenter;
+        _textLabel.layer.borderColor = HEXCOLOR(0xdddddd).CGColor;
+        [self.contentView addSubview:_textLabel];
     }
     return self;
+}
+
+- (void)refreshWithObject:(NSObject *)obj
+{
+    if([obj isKindOfClass:[YLTag class]]){
+        YLTag *tag = (YLTag *)obj;
+        UIColor *borderColor = tag.selected ? HEXCOLOR(0xffb400) : HEXCOLOR(0xdddddd);
+        UIColor *titleColor = tag.selected ? HEXCOLOR(0xffb400) : HEXCOLOR(0x666666);
+        _textLabel.layer.borderColor = borderColor.CGColor;
+        _textLabel.textColor = titleColor;
+        _textLabel.text = tag.name;
+    }
 }
 
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    _btn.frame = CGRectMake(0, 0, self.contentView.bounds.size.width, self.contentView.bounds.size.height);
+    _textLabel.frame = self.bounds;
 }
 
 -(void)setSelected:(BOOL)selected
 {
     [super setSelected:selected];
-    _btn.layer.borderColor = selected?HEXCOLOR(0xffb400).CGColor:HEXCOLOR(0xdddddd).CGColor;
-    [_btn setTitleColor:selected?HEXCOLOR(0xffb400):HEXCOLOR(0x666666) forState:UIControlStateNormal];
+    UIColor *borderColor = selected ? HEXCOLOR(0xffb400) : HEXCOLOR(0xdddddd);
+    UIColor *titleColor = selected ? HEXCOLOR(0xffb400) : HEXCOLOR(0x666666);
+    _textLabel.layer.borderColor = borderColor.CGColor;
+    _textLabel.textColor = titleColor;
 }
 
 -(void)setHighlighted:(BOOL)highlighted
 {
     [super setHighlighted:highlighted];
-    _btn.layer.borderColor = highlighted?HEXCOLOR(0xffb400).CGColor:HEXCOLOR(0xdddddd).CGColor;
-    [_btn setTitleColor:highlighted?HEXCOLOR(0xffb400):HEXCOLOR(0x666666) forState:UIControlStateNormal];
+    UIColor *borderColor = highlighted ? HEXCOLOR(0xffb400) : HEXCOLOR(0xdddddd);
+    UIColor *titleColor = highlighted ? HEXCOLOR(0xffb400) : HEXCOLOR(0x666666);
+    _textLabel.layer.borderColor = borderColor.CGColor;
+    _textLabel.textColor = titleColor;
 }
 
 @end

@@ -31,7 +31,8 @@
 
 - (IBAction)chooseTags:(id)sender {
     _textLabel.text = nil;
-    YLTagsChooser *chooser = [[YLTagsChooser alloc]initWithBottomHeight:400 maxSelectCount:5 delegate:self];
+    YLTagsChooser *chooser = [[YLTagsChooser alloc]initWithBottomHeight:500 maxSelectCount:8 delegate:self];
+    NSMutableArray *orignDataArray = [NSMutableArray array];
     NSArray *tags = @[@"篮球",
                      @"足球",
                      @"羽毛球",
@@ -61,51 +62,55 @@
                      @"弹球"
                      ];
     NSInteger index = tags.count;
-    NSMutableArray *testTags = [NSMutableArray array];
+    NSMutableArray *testTags0 = [NSMutableArray arrayWithCapacity:tags.count];
     for(NSInteger i = 0; i < index; i++){
         YLTag *tag = [[YLTag alloc]initWithId:i name:tags[i]];
-        [testTags addObject:tag];
+        [testTags0 addObject:tag];
     }
+    [orignDataArray addObject:testTags0];
+    
+    //一个section
+//    [chooser showInView:self.view];
+//    [chooser refreshWithTags:orignDataArray selectedTags:selectedTags];
+//    return;
+    
+    NSMutableArray *testTags1 = [NSMutableArray arrayWithCapacity:40];
     for(NSInteger i = index; i < index + 40; i++){
         NSString *name;
-        if(i % 3 == 0){
-            name = [NSString stringWithFormat:@"测试%li",i];
-        }else if (i % 3 == 1){
-            name = [NSString stringWithFormat:@"测试数%li",i];
+        if(i % 4 == 0){
+            name = [NSString stringWithFormat:@"Remember%li",i];
+        }else if (i % 4 == 1){
+            name = [NSString stringWithFormat:@"Remember Give%li",i];
+        }else if(i % 4 == 2){
+            name = [NSString stringWithFormat:@"Remember Give Me a@%li",i];
         }else{
-            name = [NSString stringWithFormat:@"测试数据%li",i];
+            name = [NSString stringWithFormat:@"Remember Give Me a Star@%li",i];
         }
         YLTag *tag = [[YLTag alloc]initWithId:i name:name];
-        [testTags addObject:tag];
+        [testTags1 addObject:tag];
     }
+    [orignDataArray addObject:testTags1];
+
+    
     index += 40;
-    for(NSInteger i = index; i < index + 30; i++){
-        NSString *name;
-        if(i % 3 == 0){
-            name = [NSString stringWithFormat:@"优%li",i];
-        }else if (i % 3 == 1){
-            name = [NSString stringWithFormat:@"优蓝%li",i];
-        }else{
-            name = [NSString stringWithFormat:@"优蓝网%li",i];
-        }
-        YLTag *tag = [[YLTag alloc]initWithId:i name:name];
-        [testTags addObject:tag];
-    }
-    index += 30;
+    NSMutableArray *testTags2 = [NSMutableArray arrayWithCapacity:20];
     for(NSInteger i = index; i < index + 20; i++){
         NSString *name;
         if(i % 3 == 0){
-            name = [NSString stringWithFormat:@"标签%li",i];
+            name = [NSString stringWithFormat:@"标签选择器%li",i];
         }else if (i % 3 == 1){
             name = [NSString stringWithFormat:@"Lambert%li",i];
         }else{
             name = [NSString stringWithFormat:@"CodeNinja%li",i];
         }
         YLTag *tag = [[YLTag alloc]initWithId:i name:name];
-        [testTags addObject:tag];
+        [testTags2 addObject:tag];
     }
+    [orignDataArray addObject:testTags2];
+    
+    //多个section
     [chooser showInView:self.view];
-    [chooser refreshWithTags:testTags selectedTags:selectedTags];
+    [chooser refreshWithTags:orignDataArray selectedTags:selectedTags];
 }
 
 

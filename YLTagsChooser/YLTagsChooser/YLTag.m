@@ -20,11 +20,11 @@
 
 - (BOOL)isEqual:(id)object
 {
-    if(![object isKindOfClass:[self class]]){
+    if(!object || ![object isKindOfClass:[self class]]){
         return NO;
     }
     YLTag *otherTag = (YLTag *)object;
-    return self.objId == otherTag.objId && [self.name isEqual:otherTag.name];
+    return self.objId == otherTag.objId && [self.name isEqualToString:otherTag.name];
 }
 
 - (NSString *)description

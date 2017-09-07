@@ -8,6 +8,10 @@
 
 #import "YLCollectionReusableView.h"
 
+@interface YLCollectionReusableView ()
+@property(nonatomic,strong)UILabel *textLabel;
+@end
+
 @implementation YLCollectionReusableView
 - (void)prepareForReuse
 {
@@ -18,12 +22,17 @@
 {
     if(self = [super initWithFrame:frame]){
         self.backgroundColor = [UIColor whiteColor];
-        UILabel *textLabel = [[UILabel alloc]initWithFrame:self.bounds];
-        textLabel.textAlignment = NSTextAlignmentCenter;
-        textLabel.text = @"This is a section header";
-        [self addSubview:textLabel];
+        _textLabel = [[UILabel alloc]initWithFrame:self.bounds];
+        _textLabel.textAlignment = NSTextAlignmentCenter;
+        _textLabel.text = @"This is a section header";
+        [self addSubview:_textLabel];
     }
     return self;
+}
+
+- (void)setTitle:(NSString *)title
+{
+    _textLabel.text = title;
 }
 
 @end

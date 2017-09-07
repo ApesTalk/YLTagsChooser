@@ -22,6 +22,13 @@
 -(instancetype)initWithBottomHeight:(CGFloat)bHeight
                     maxSelectCount:(CGFloat)maxCount
                            delegate:(id<YLTagsChooserDelegate>)aDelegate;
+
+/**
+ 刷新
+
+ @param tags 原数据。包含多个数组对象的数组，决定有几个section
+ @param selectedTags 已选择的数据
+ */
 -(void)refreshWithTags:(NSArray *)tags selectedTags:(NSArray *)selectedTags;
 - (void)showInView:(UIView *)view;
 - (void)dismiss;
@@ -39,6 +46,8 @@
 
 #pragma mark---标签cell
 @interface YLTagsCollectionViewCell : UICollectionViewCell
-@property(nonatomic,strong)UIButton *btn;
+@property(nonatomic,strong)UILabel *textLabel;
+
+- (void)refreshWithObject:(NSObject *)obj;
 
 @end
