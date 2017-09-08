@@ -34,7 +34,7 @@ static CGFloat const kYGap = 10.f;
 @property (nonatomic,strong) UIView            *bottomView;
 @property (nonatomic,strong) UICollectionView  *myCollectionView;
 @property (nonatomic,strong) UIButton          *ensureBtn;
-@property (nonatomic,copy  ) NSArray           *orignalTags;
+@property (nonatomic,strong) NSMutableArray    *orignalTags;
 @property (nonatomic,strong) NSMutableArray    *selectedTags;
 
 @end
@@ -46,7 +46,7 @@ static CGFloat const kYGap = 10.f;
                            delegate:(id<YLTagsChooserDelegate>)aDelegate
 {
     if(self = [super initWithFrame:CGRectMake(0, 0, kFrameWidth, kFrameHeight)]){
-        _orignalTags = [NSArray array];
+        _orignalTags = [NSMutableArray array];
         _selectedTags = [NSMutableArray array];
         self.alpha = 0.f;
         self.backgroundColor = [[UIColor blackColor]colorWithAlphaComponent:0.5];
@@ -64,12 +64,15 @@ static CGFloat const kYGap = 10.f;
 
 -(void)refreshWithTags:(NSArray *)tags selectedTags:(NSArray *)selectedTags
 {
-    self.orignalTags = tags;
+    [_orignalTags removeAllObjects];
+    [_orignalTags addObjectsFromArray:tags];
+    
     [_selectedTags removeAllObjects];
     [_selectedTags addObjectsFromArray:selectedTags];
-    for(NSArray *array in tags){
+    
+    for(NSArray *array in _orignalTags){
         for(YLTag *tag in array){
-            tag.selected = [selectedTags containsObject:tag];
+            tag.selected = [_selectedTags containsObject:tag];
         }
     }
     [self.myCollectionView reloadData];
@@ -98,7 +101,6 @@ static CGFloat const kYGap = 10.f;
         [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier];
         [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier];
         [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier1];
-
         _myCollectionView.dataSource = self;
         _myCollectionView.delegate = self;
     }
@@ -150,7 +152,7 @@ static CGFloat const kYGap = 10.f;
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     YLCollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier forIndexPath:indexPath];
-    [header setTitle:[NSString stringWithFormat:@"第%li个分区",indexPath.section]];
+    [header setTitle:[NSString stringWithFormat:@"Section Header %li",indexPath.section]];
     return header;
 }
 
@@ -196,7 +198,10 @@ static CGFloat const kYGap = 10.f;
         tag.selected = NO;
         [_selectedTags removeObject:tag];
     }
-    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    
+    [collectionView reloadData];
+    //!!!!:Don't use this method! Should be optimized
+//    [collectionView reloadItemsAtIndexPaths:@[indexPath]];
 }
 
 #pragma mark---touch

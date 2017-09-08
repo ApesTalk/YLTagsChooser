@@ -1,7 +1,7 @@
 # YLTagsChooser
 用UICollectionView实现的兴趣标签选择器，可传入最多可选择标签数量和上一次选中的标签。
 
->>注意：UICollectionView在cell较多的情况下，在模拟器上运行程序，在滑动的过程中会出现某些cell一会显示一会不显示的问题。请不要担心，在真机上运行没有问题！
+**注意：UICollectionView在cell较多的情况下，在滑动的过程中会出现某些cell一会显示一会不显示的问题已解决，欢迎star和提出优化方案。**
 
 在这里我用UICollectionView实现了高度固定，宽度不固定，每行显示的标签个数不定的瀑布流效果。本示例只简单展示了类似UIActionSheet弹出效果。可以模仿实现其他类似效果。
 
@@ -85,4 +85,40 @@ Maybe you have multiple pages in your APP will use the tags selector, and each t
 ```OBJC
 [chooser refreshWithTags:orignDataArray selectedTags:selectedTags];
 ```
+
+## 2017-09-08 update
+
+一、解决UICollectionView在滑动过程中有些cell一会显示一会不显示的问题。
+
+搜索``UICollectionView some cell not appear``或``UICollectionViewCell not appear``可见相关问题。
+
+这个bug主要是cell较多并且cell的frame属性自定义的情况下很容易发生。
+
+因为我们的每个item的属性都是完全自定义的，所以在``layoutAttributesForElementsInRect:``方法如果直接调用``[super layoutAttributesForElementsInRect: rect]``，拿到的这个集合其实是不对的，所以或导致有些cell在滑动过程中一会消失一会显示。
+
+
+### 下面简单讲一下解决思路：
+
+自定义UICollectionViewLayout必须覆盖的方法且执行顺序如下：
+
+```OBJC
+- (void)prepareLayout;
+- (CGSize)collectionViewContentSize;
+- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect;
+```
+
+- prepareLayout
+
+布局快要生效的时候被调用，在这里将每个item的frame属性计算出来并缓存起来。
+
+- collectionViewContentSize
+
+UICollectionView通过它获取可滑动范围，在这里根据上面计算的值获取最大可滚动范围。
+
+- layoutAttributesForElementsInRect:
+
+返回指定区域内的item的布局属性（UICollectionViewLayoutAttributes对象）集合。
+
+解决这个bug的要点是在``layoutAttributesForElementsInRect:``方法中先获取UICollectionView当前的可见范围，然后根据第一步计算并缓存起来的item属性来判断当前可见范围内有哪些item应该是可见的，把这些item对应的UICollectionViewLayoutAttributes对象放到一个数组中返回。
+
 
