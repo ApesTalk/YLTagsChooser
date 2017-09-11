@@ -88,7 +88,7 @@ Maybe you have multiple pages in your APP will use the tags selector, and each t
 
 ## 2017-09-08 update
 
-一、解决UICollectionView在滑动过程中有些cell一会显示一会不显示的问题。
+一、解决UICollectionView在滑动过程中有些cell一会显示一会不显示的问题。[UICollectionView的重大bug?真相竟然是......](http://www.jianshu.com/p/c07e28d3563d)
 
 搜索``UICollectionView some cell not appear``或``UICollectionViewCell not appear``可见相关问题。
 
@@ -120,5 +120,4 @@ UICollectionView通过它获取可滑动范围，在这里根据上面计算的�
 返回指定区域内的item的布局属性（UICollectionViewLayoutAttributes对象）集合。
 
 解决这个bug的要点是在``layoutAttributesForElementsInRect:``方法中先获取UICollectionView当前的可见范围，然后根据第一步计算并缓存起来的item属性来判断当前可见范围内有哪些item应该是可见的，把这些item对应的UICollectionViewLayoutAttributes对象放到一个数组中返回。
-
 

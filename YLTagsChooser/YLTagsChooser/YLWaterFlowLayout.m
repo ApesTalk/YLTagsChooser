@@ -8,6 +8,7 @@
 
 #import "YLWaterFlowLayout.h"
 #import "NSArray+YLBoundsCheck.h"
+#import <UIKit/UICollectionViewCell.h>
 
 @interface YLWaterFlowLayout()
 @property(nonatomic,strong)NSMutableArray *framesArray;
@@ -72,7 +73,7 @@
                currentFrame.origin.y <= visibleRect.origin.y + visibleRect.size.height){
                 //first section header should show
                 if(row == 0 && section == 0){
-                    UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:@"UICollectionElementKindSectionHeader"
+                    UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                                                          atIndexPath:currentIndexPath] copy];
                     CGRect frame = headerAttr.frame;
                     frame.origin.y = 0;
@@ -88,7 +89,7 @@
                 //next section header should show
                 if(row == currentSectionFrames.count - 1 && section + 1 < _framesArray.count &&
                    currentFrame.origin.y + currentFrame.size.height + self.sectionInset.bottom < visibleRect.origin.y + visibleRect.size.height){
-                    UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:@"UICollectionElementKindSectionHeader"
+                    UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                                                          atIndexPath:[NSIndexPath indexPathForRow:0 inSection:section + 1]] copy];
                     CGFloat y = [self contentHeightInSection:section];
                     CGRect frame = headerAttr.frame;
