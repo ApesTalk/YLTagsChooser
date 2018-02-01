@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		45111D111DC752540051AA72 /* YLCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 45111D101DC752540051AA72 /* YLCollectionReusableView.m */; };
-		456324F31EF230B5000AD9AF /* YLTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 456324F21EF230B5000AD9AF /* YLTag.m */; };
 		457042321D0E580400128041 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042311D0E580400128041 /* main.m */; };
 		457042351D0E580400128041 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042341D0E580400128041 /* AppDelegate.m */; };
 		457042381D0E580400128041 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042371D0E580400128041 /* ViewController.m */; };
@@ -17,11 +15,13 @@
 		457042401D0E580400128041 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4570423E1D0E580400128041 /* LaunchScreen.storyboard */; };
 		4570424B1D0E580400128041 /* YLTagsChooserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4570424A1D0E580400128041 /* YLTagsChooserTests.m */; };
 		457042561D0E580400128041 /* YLTagsChooserUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042551D0E580400128041 /* YLTagsChooserUITests.m */; };
-		457042651D0E5A0400128041 /* YLTagsChooser.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042641D0E5A0400128041 /* YLTagsChooser.m */; };
-		457042681D0E5AC200128041 /* YLWaterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 457042671D0E5AC200128041 /* YLWaterFlowLayout.m */; };
-		4570426B1D0E5D6300128041 /* NSArray+YLBoundsCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 4570426A1D0E5D6300128041 /* NSArray+YLBoundsCheck.m */; };
 		457042771D0E62B900128041 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 457042761D0E62B900128041 /* CoreGraphics.framework */; };
 		457042791D0E633300128041 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 457042781D0E633300128041 /* UIKit.framework */; };
+		6D3855B62023503900A15073 /* NSArray+YLBoundsCheck.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3855AD2023503900A15073 /* NSArray+YLBoundsCheck.m */; };
+		6D3855B72023503900A15073 /* YLCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3855AF2023503900A15073 /* YLCollectionReusableView.m */; };
+		6D3855B82023503900A15073 /* YLTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3855B12023503900A15073 /* YLTag.m */; };
+		6D3855B92023503900A15073 /* YLTagsChooser.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3855B32023503900A15073 /* YLTagsChooser.m */; };
+		6D3855BA2023503900A15073 /* YLWaterFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3855B52023503900A15073 /* YLWaterFlowLayout.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,10 +42,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		45111D0F1DC752540051AA72 /* YLCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLCollectionReusableView.h; sourceTree = "<group>"; };
-		45111D101DC752540051AA72 /* YLCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLCollectionReusableView.m; sourceTree = "<group>"; };
-		456324F11EF230B5000AD9AF /* YLTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLTag.h; sourceTree = "<group>"; };
-		456324F21EF230B5000AD9AF /* YLTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLTag.m; sourceTree = "<group>"; };
 		456324F41EF239DA000AD9AF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		456324F51EF239DA000AD9AF /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
 		4570422D1D0E580400128041 /* YLTagsChooser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YLTagsChooser.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,14 +60,18 @@
 		457042511D0E580400128041 /* YLTagsChooserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YLTagsChooserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		457042551D0E580400128041 /* YLTagsChooserUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YLTagsChooserUITests.m; sourceTree = "<group>"; };
 		457042571D0E580400128041 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		457042631D0E5A0400128041 /* YLTagsChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLTagsChooser.h; sourceTree = "<group>"; };
-		457042641D0E5A0400128041 /* YLTagsChooser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLTagsChooser.m; sourceTree = "<group>"; };
-		457042661D0E5AC200128041 /* YLWaterFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLWaterFlowLayout.h; sourceTree = "<group>"; };
-		457042671D0E5AC200128041 /* YLWaterFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLWaterFlowLayout.m; sourceTree = "<group>"; };
-		457042691D0E5D6300128041 /* NSArray+YLBoundsCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+YLBoundsCheck.h"; sourceTree = "<group>"; };
-		4570426A1D0E5D6300128041 /* NSArray+YLBoundsCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+YLBoundsCheck.m"; sourceTree = "<group>"; };
 		457042761D0E62B900128041 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		457042781D0E633300128041 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		6D3855AC2023503900A15073 /* NSArray+YLBoundsCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+YLBoundsCheck.h"; sourceTree = "<group>"; };
+		6D3855AD2023503900A15073 /* NSArray+YLBoundsCheck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+YLBoundsCheck.m"; sourceTree = "<group>"; };
+		6D3855AE2023503900A15073 /* YLCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLCollectionReusableView.h; sourceTree = "<group>"; };
+		6D3855AF2023503900A15073 /* YLCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLCollectionReusableView.m; sourceTree = "<group>"; };
+		6D3855B02023503900A15073 /* YLTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLTag.h; sourceTree = "<group>"; };
+		6D3855B12023503900A15073 /* YLTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLTag.m; sourceTree = "<group>"; };
+		6D3855B22023503900A15073 /* YLTagsChooser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLTagsChooser.h; sourceTree = "<group>"; };
+		6D3855B32023503900A15073 /* YLTagsChooser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLTagsChooser.m; sourceTree = "<group>"; };
+		6D3855B42023503900A15073 /* YLWaterFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YLWaterFlowLayout.h; sourceTree = "<group>"; };
+		6D3855B52023503900A15073 /* YLWaterFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YLWaterFlowLayout.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,14 +126,7 @@
 		4570422F1D0E580400128041 /* YLTagsChooser */ = {
 			isa = PBXGroup;
 			children = (
-				457042691D0E5D6300128041 /* NSArray+YLBoundsCheck.h */,
-				4570426A1D0E5D6300128041 /* NSArray+YLBoundsCheck.m */,
-				457042661D0E5AC200128041 /* YLWaterFlowLayout.h */,
-				457042671D0E5AC200128041 /* YLWaterFlowLayout.m */,
-				456324F11EF230B5000AD9AF /* YLTag.h */,
-				456324F21EF230B5000AD9AF /* YLTag.m */,
-				457042631D0E5A0400128041 /* YLTagsChooser.h */,
-				457042641D0E5A0400128041 /* YLTagsChooser.m */,
+				6D3855AB2023503900A15073 /* TagsChooser */,
 				457042331D0E580400128041 /* AppDelegate.h */,
 				457042341D0E580400128041 /* AppDelegate.m */,
 				457042361D0E580400128041 /* ViewController.h */,
@@ -143,8 +136,6 @@
 				4570423E1D0E580400128041 /* LaunchScreen.storyboard */,
 				457042411D0E580400128041 /* Info.plist */,
 				457042301D0E580400128041 /* Supporting Files */,
-				45111D0F1DC752540051AA72 /* YLCollectionReusableView.h */,
-				45111D101DC752540051AA72 /* YLCollectionReusableView.m */,
 			);
 			path = YLTagsChooser;
 			sourceTree = "<group>";
@@ -173,6 +164,23 @@
 				457042571D0E580400128041 /* Info.plist */,
 			);
 			path = YLTagsChooserUITests;
+			sourceTree = "<group>";
+		};
+		6D3855AB2023503900A15073 /* TagsChooser */ = {
+			isa = PBXGroup;
+			children = (
+				6D3855AC2023503900A15073 /* NSArray+YLBoundsCheck.h */,
+				6D3855AD2023503900A15073 /* NSArray+YLBoundsCheck.m */,
+				6D3855AE2023503900A15073 /* YLCollectionReusableView.h */,
+				6D3855AF2023503900A15073 /* YLCollectionReusableView.m */,
+				6D3855B02023503900A15073 /* YLTag.h */,
+				6D3855B12023503900A15073 /* YLTag.m */,
+				6D3855B22023503900A15073 /* YLTagsChooser.h */,
+				6D3855B32023503900A15073 /* YLTagsChooser.m */,
+				6D3855B42023503900A15073 /* YLWaterFlowLayout.h */,
+				6D3855B52023503900A15073 /* YLWaterFlowLayout.m */,
+			);
+			path = TagsChooser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -307,13 +315,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				457042381D0E580400128041 /* ViewController.m in Sources */,
-				457042651D0E5A0400128041 /* YLTagsChooser.m in Sources */,
 				457042351D0E580400128041 /* AppDelegate.m in Sources */,
-				456324F31EF230B5000AD9AF /* YLTag.m in Sources */,
-				45111D111DC752540051AA72 /* YLCollectionReusableView.m in Sources */,
-				4570426B1D0E5D6300128041 /* NSArray+YLBoundsCheck.m in Sources */,
-				457042681D0E5AC200128041 /* YLWaterFlowLayout.m in Sources */,
 				457042321D0E580400128041 /* main.m in Sources */,
+				6D3855B82023503900A15073 /* YLTag.m in Sources */,
+				6D3855BA2023503900A15073 /* YLWaterFlowLayout.m in Sources */,
+				6D3855B62023503900A15073 /* NSArray+YLBoundsCheck.m in Sources */,
+				6D3855B72023503900A15073 /* YLCollectionReusableView.m in Sources */,
+				6D3855B92023503900A15073 /* YLTagsChooser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
