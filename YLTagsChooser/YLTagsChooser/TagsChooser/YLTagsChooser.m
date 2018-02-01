@@ -152,7 +152,7 @@ static CGFloat const kYGap = 10.f;
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
     YLCollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier forIndexPath:indexPath];
-    [header setTitle:[NSString stringWithFormat:@"Section Header %li",indexPath.section]];
+    [header setTitle:[NSString stringWithFormat:@"Section Header %li",(long)indexPath.section]];
     return header;
 }
 

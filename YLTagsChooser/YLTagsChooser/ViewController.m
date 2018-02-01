@@ -78,13 +78,13 @@
     for(NSInteger i = index; i < index + 40; i++){
         NSString *name;
         if(i % 4 == 0){
-            name = [NSString stringWithFormat:@"Remember%li",i];
+            name = [NSString stringWithFormat:@"Remember%li",(long)i];
         }else if (i % 4 == 1){
-            name = [NSString stringWithFormat:@"Remember Give%li",i];
+            name = [NSString stringWithFormat:@"Remember Give%li",(long)i];
         }else if(i % 4 == 2){
-            name = [NSString stringWithFormat:@"Remember Give Me a@%li",i];
+            name = [NSString stringWithFormat:@"Remember Give Me a@%li",(long)i];
         }else{
-            name = [NSString stringWithFormat:@"Remember Give Me a Star@%li",i];
+            name = [NSString stringWithFormat:@"Remember Give Me a Star@%li",(long)i];
         }
         YLTag *tag = [[YLTag alloc]initWithId:i name:name];
         [testTags1 addObject:tag];
@@ -97,11 +97,11 @@
     for(NSInteger i = index; i < index + 20; i++){
         NSString *name;
         if(i % 3 == 0){
-            name = [NSString stringWithFormat:@"标签选择器%li",i];
+            name = [NSString stringWithFormat:@"标签选择器%li",(long)i];
         }else if (i % 3 == 1){
-            name = [NSString stringWithFormat:@"Lambert%li",i];
+            name = [NSString stringWithFormat:@"Lambert%li",(long)i];
         }else{
-            name = [NSString stringWithFormat:@"CodeNinja%li",i];
+            name = [NSString stringWithFormat:@"CodeNinja%li",(long)i];
         }
         YLTag *tag = [[YLTag alloc]initWithId:i name:name];
         [testTags2 addObject:tag];
