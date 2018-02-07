@@ -126,7 +126,7 @@ UICollectionView通过它获取可滑动范围，在这里根据上面计算的�
 Fix bug3, support set UICollectionView's contentInset and also support set setionHeader and sectionFooter at the same time.
 
 修复bug:[设置 collectionView.contentInset 时候，就会有问题
- #3](https://github.com/lqcjdx/YLTagsChooser/issues/3) (fixed bug #2)
+ #3](https://github.com/lqcjdx/YLTagsChooser/issues/3) (fixed bug #3)
 
 - 新增支持设置UICollectionview的contentInset。
 
