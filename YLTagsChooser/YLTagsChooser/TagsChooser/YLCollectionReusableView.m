@@ -24,7 +24,7 @@
         self.backgroundColor = [UIColor whiteColor];
         _textLabel = [[UILabel alloc]initWithFrame:self.bounds];
         _textLabel.textAlignment = NSTextAlignmentCenter;
-        _textLabel.text = @"This is a section header";
+        _textLabel.text = @"This is a section header/footer";
         [self addSubview:_textLabel];
     }
     return self;

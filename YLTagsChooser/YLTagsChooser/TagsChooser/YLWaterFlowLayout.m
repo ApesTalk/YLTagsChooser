@@ -31,7 +31,9 @@
 {
     self.minimumInteritemSpacing = 10;//同一行不同cell间距
     self.minimumLineSpacing = 10;//行间距
-    self.headerReferenceSize = CGSizeMake(self.collectionView.frame.size.width, 50);//设置section header 固定高度，如果需要的话
+    //support set sectionheader and sectionfooter at the same time
+    self.headerReferenceSize = CGSizeMake(CGRectGetWidth(self.collectionView.frame), 50);//设置section header 固定高度，如果需要的话
+    self.footerReferenceSize = CGSizeMake(CGRectGetWidth(self.collectionView.frame), 30);//设置section footer 固定高度，如果需要的话
     self.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
     self.scrollDirection = UICollectionViewScrollDirectionVertical;
 }
@@ -47,7 +49,8 @@
 //step2
 - (CGSize)collectionViewContentSize
 {
-    CGFloat width = self.collectionView.frame.size.width;
+    //support set collectionview's contentInset
+    CGFloat width = self.collectionView.frame.size.width - self.collectionView.contentInset.left - self.collectionView.contentInset.right;
     return CGSizeMake(width, _contentHeight);
 }
 
@@ -71,31 +74,65 @@
             NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
             if(currentFrame.origin.y + currentFrame.size.height >= visibleRect.origin.y &&
                currentFrame.origin.y <= visibleRect.origin.y + visibleRect.size.height){
-                //first section header should show
-                if(row == 0 && section == 0){
+                //when first row appear
+                if(row == 0){
+                    
+                    //section header should show
                     UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
                                                                                                          atIndexPath:currentIndexPath] copy];
                     CGRect frame = headerAttr.frame;
-                    frame.origin.y = 0;
+                    if(section == 0){
+                        frame.origin.y = self.collectionView.contentInset.top;
+                    }else{
+                        frame.origin.y = [self contentHeightInSection:section - 1];
+                    }
                     headerAttr.frame = frame;
                     [attributesArray addObject:headerAttr];
+                    
+                    
+                    if(section > 0){
+                        //pre section's footer should show
+                        NSInteger preSection = section - 1;
+                        NSArray *preSectionFrames = _framesArray[preSection];
+                        NSIndexPath *footerIndexPath = [NSIndexPath indexPathForRow:preSectionFrames.count inSection:preSection];
+                        UICollectionViewLayoutAttributes *footerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                                                             atIndexPath:footerIndexPath] copy];
+                        CGRect fFrame = footerAttr.frame;
+                        fFrame.origin.y = [self contentHeightInSection:preSection] - self.footerReferenceSize.height;
+                        footerAttr.frame = fFrame;
+                        [attributesArray addObject:footerAttr];
+                    }
                 }
                 
-                //cell should show
+                //cells should show
                 UICollectionViewLayoutAttributes *cellAttrs = [[self layoutAttributesForItemAtIndexPath:currentIndexPath] copy];
                 cellAttrs.frame = currentFrame;
                 [attributesArray addObject:cellAttrs];
                 
-                //next section header should show
-                if(row == currentSectionFrames.count - 1 && section + 1 < _framesArray.count &&
-                   currentFrame.origin.y + currentFrame.size.height + self.sectionInset.bottom < visibleRect.origin.y + visibleRect.size.height){
-                    UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
-                                                                                                         atIndexPath:[NSIndexPath indexPathForRow:0 inSection:section + 1]] copy];
-                    CGFloat y = [self contentHeightInSection:section];
-                    CGRect frame = headerAttr.frame;
-                    frame.origin.y = y;
-                    headerAttr.frame = frame;
-                    [attributesArray addObject:headerAttr];
+                
+                //when last cell appear
+                if(row == currentSectionFrames.count - 1 &&
+                   currentFrame.origin.y + currentFrame.size.height + self.sectionInset.bottom <= visibleRect.origin.y + visibleRect.size.height){
+                    //current section footer should show
+                    NSIndexPath *footerIndexPath = [NSIndexPath indexPathForRow:currentSectionFrames.count inSection:section];
+                    UICollectionViewLayoutAttributes *footerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionFooter
+                                                                                                         atIndexPath:footerIndexPath] copy];
+                    CGRect fFrame = footerAttr.frame;
+                    fFrame.origin.y = [self contentHeightInSection:section] - self.footerReferenceSize.height;
+                    footerAttr.frame = fFrame;
+                    [attributesArray addObject:footerAttr];
+                    
+                    //next section header should show
+                    NSInteger nextSection = section + 1;
+                    if(nextSection < _framesArray.count){
+                        NSIndexPath *headerIndexPath = [NSIndexPath indexPathForRow:0 inSection:nextSection];
+                        UICollectionViewLayoutAttributes *headerAttr = [[self layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader
+                                                                                                             atIndexPath:headerIndexPath] copy];
+                        CGRect hFrame = headerAttr.frame;
+                        hFrame.origin.y = [self contentHeightInSection:section];;
+                        headerAttr.frame = hFrame;
+                        [attributesArray addObject:headerAttr];
+                    }
                 }
             }
         }
@@ -118,7 +155,7 @@
         for(NSInteger row = 0; row < numberOfRows; row++){
             CGFloat x = self.sectionInset.left;
             //如果有sectionheader需要加上sectionheader高度
-            CGFloat y = self.headerReferenceSize.height + self.sectionInset.top;
+            CGFloat y = self.headerReferenceSize.height + self.sectionInset.top + self.collectionView.contentInset.top;
             
             if(section > 0 && _framesArray.count > section - 1){
                 y = [self contentHeightInSection:section - 1] + self.headerReferenceSize.height + self.sectionInset.top;
@@ -134,8 +171,9 @@
             NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
             CGFloat currentWidth = [self.delegate waterFlowLayout:self widthAtIndexPath:currentIndexPath];
             //保证一个cell不超过最大宽度
-            currentWidth = MIN(currentWidth, self.collectionView.frame.size.width - self.sectionInset.left - self.sectionInset.right);
-            if(x + currentWidth > self.collectionView.frame.size.width - self.sectionInset.right){
+            CGFloat maxCellWidth = self.collectionView.frame.size.width - self.sectionInset.left - self.sectionInset.right - self.collectionView.contentInset.left - self.collectionView.contentInset.right;
+            currentWidth = MIN(currentWidth, maxCellWidth);
+            if(x + currentWidth > self.collectionView.frame.size.width - self.sectionInset.right - self.collectionView.contentInset.right){
                 //超出范围，换行
                 x = self.sectionInset.left;
                 y += _rowHeight + self.minimumLineSpacing;
@@ -145,7 +183,7 @@
             [currentSectionFrames addObject:[NSValue valueWithCGRect:currentCellFrame]];
         }
     }
-    _contentHeight = [self contentHeightInSection:_framesArray.count - 1];
+    _contentHeight = [self contentHeightInSection:_framesArray.count - 1] + self.collectionView.contentInset.bottom;
 }
 
 - (CGFloat)contentHeightInSection:(NSInteger)section
@@ -160,7 +198,7 @@
                 height = y;
             }
         }];
-        height += _rowHeight + self.sectionInset.bottom;
+        height += _rowHeight + self.sectionInset.bottom + self.footerReferenceSize.height;
     }
     return height;
 }

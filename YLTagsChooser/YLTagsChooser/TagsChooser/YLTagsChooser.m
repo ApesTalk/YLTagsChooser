@@ -18,9 +18,9 @@
 #define kFrameWidth [UIScreen mainScreen].bounds.size.width
 #define kFrameHeight [UIScreen mainScreen].bounds.size.height
 
-static NSString *sectionHeaderIdentifier = @"YLCollectionReusableView";
+static NSString *headerIdentifier = @"YLCollectionReusableView";
+static NSString *footerIdentifier = @"YLCollectionReusableView";
 static NSString *cellIdentifier = @"YLTagsCollectionViewCell";
-static NSString *cellIdentifier1 = @"YLTagsCollectionViewCell";
 
 static NSTimeInterval const kSheetAnimationDuration = 0.25;
 static CGFloat const kBottomBtnHeight = 44.f;
@@ -98,11 +98,14 @@ static CGFloat const kYGap = 10.f;
         _myCollectionView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, kYGap, kFrameWidth, _bottomHeight - 2 * kYGap - kBottomGap - kBottomBtnHeight)
                                               collectionViewLayout:layout];
         _myCollectionView.backgroundColor = [UIColor clearColor];
-        [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier];
+        [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerIdentifier];
+        [_myCollectionView registerClass:[YLCollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footerIdentifier];
         [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier];
-        [_myCollectionView registerClass:[YLTagsCollectionViewCell class] forCellWithReuseIdentifier:cellIdentifier1];
         _myCollectionView.dataSource = self;
         _myCollectionView.delegate = self;
+        _myCollectionView.showsHorizontalScrollIndicator = NO;
+        //support set collectionview's contentInset
+//        _myCollectionView.contentInset = UIEdgeInsetsMake(30, 20, 30, 20);
     }
     return _myCollectionView;
 }
@@ -151,9 +154,15 @@ static CGFloat const kYGap = 10.f;
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    YLCollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:sectionHeaderIdentifier forIndexPath:indexPath];
-    [header setTitle:[NSString stringWithFormat:@"Section Header %li",(long)indexPath.section]];
-    return header;
+    if([kind isEqualToString:UICollectionElementKindSectionHeader]){
+        YLCollectionReusableView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerIdentifier forIndexPath:indexPath];
+        [header setTitle:[NSString stringWithFormat:@"Section Header %li",(long)indexPath.section]];
+        return header;
+    }else{
+        YLCollectionReusableView *footer = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:footerIdentifier forIndexPath:indexPath];
+        [footer setTitle:[NSString stringWithFormat:@"Section Footer %li",(long)indexPath.section]];
+        return footer;
+    }
 }
 
 #pragma mark---YLWaterFlowLayoutDelegate

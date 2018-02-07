@@ -121,3 +121,41 @@ UICollectionView通过它获取可滑动范围，在这里根据上面计算的�
 
 解决这个bug的要点是在``layoutAttributesForElementsInRect:``方法中先获取UICollectionView当前的可见范围，然后根据第一步计算并缓存起来的item属性来判断当前可见范围内有哪些item应该是可见的，把这些item对应的UICollectionViewLayoutAttributes对象放到一个数组中返回。
 
+## 2018-2-7 update
+
+Fix bug3, support set UICollectionView's contentInset and also support set setionHeader and sectionFooter at the same time.
+
+修复bug:[设置 collectionView.contentInset 时候，就会有问题
+ #3](https://github.com/lqcjdx/YLTagsChooser/issues/3) (fixed bug #2)
+
+- 新增支持设置UICollectionview的contentInset。
+
+举个栗子：
+
+设置了``_myCollectionView.contentInset = UIEdgeInsetsMake(30, 20, 30, 20);``之后，需要在YLWaterFlowLayout中的如下方法返回UICollectionView的可滚动范围，否则你会发现它竟然可以左右滚动。
+
+```OBJC
+#pragma mark - CollectionView的滚动范围
+//step2
+- (CGSize)collectionViewContentSize
+{
+    //support set collectionview's contentInset
+    CGFloat width = self.collectionView.frame.size.width - self.collectionView.contentInset.left - self.collectionView.contentInset.right;
+    return CGSizeMake(width, _contentHeight);
+}
+```
+
+- 新增支持UICollectionview同时设置sectionHeader和sectionFooter。
+
+已优化YLWaterFlowLayout的代码，支持同时设置UICollectionView的contentInset、layout的sectionInset、layout的headerReferenceSize和layout的footerReferenceSize，也可以正常地全部展示header、footer和cell。
+
+效果图如下：
+
+![](https://github.com/lqcjdx/YLTagsChooser/blob/master/fix_bug3.gif)
+
+
+
+当然，这里只是提供一种解决UICollectionView滚动过程中部分cell一会显示一会不显示的问题思路。如果你需要实现其他效果，你可以自己尝试用我这种思路去实现，或者提出来，大家一起讨论一下怎么实现。如果帮到了你，请留下一个Star表示支持，谢谢！
+
+
+
