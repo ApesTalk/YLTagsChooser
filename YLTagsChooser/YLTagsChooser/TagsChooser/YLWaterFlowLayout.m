@@ -144,8 +144,10 @@
 - (void)calculateFrames
 {
     if(_framesArray.count > 0){
-        return;
+//        return;
+        [_framesArray removeAllObjects];
     }
+    
     NSInteger sectionCount = self.collectionView.numberOfSections;
     for(NSInteger section = 0; section < sectionCount; section++){
         NSMutableArray *currentSectionFrames = [NSMutableArray arrayWithCapacity:sectionCount];

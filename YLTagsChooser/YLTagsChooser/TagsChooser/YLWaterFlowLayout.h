@@ -16,8 +16,8 @@
 @end
 
 @interface YLWaterFlowLayout : UICollectionViewFlowLayout
-@property (nonatomic,assign) id<YLWaterFlowLayoutDelegate> delegate;
-@property(nonatomic,assign)CGFloat rowHeight;///< 固定行高
+@property (nonatomic, weak) id<YLWaterFlowLayoutDelegate> delegate;
+@property (nonatomic, assign) CGFloat rowHeight;///< 固定行高
 
 @end
 

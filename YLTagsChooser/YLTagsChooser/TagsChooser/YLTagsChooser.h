@@ -11,7 +11,7 @@
 @protocol YLTagsChooserDelegate;
 
 @interface YLTagsChooser : UIView
-@property(nonatomic,assign)id<YLTagsChooserDelegate>delegate;
+@property(nonatomic,weak)id<YLTagsChooserDelegate>delegate;
 @property(nonatomic,assign) CGFloat    bottomHeight;   ///< 指定白色背景高度
 @property(nonatomic,assign) NSInteger  maxSelectCount; ///< 最多可选择数量
 

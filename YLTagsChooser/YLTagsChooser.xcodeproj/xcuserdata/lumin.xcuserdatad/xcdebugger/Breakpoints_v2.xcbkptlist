@@ -9,8 +9,8 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            scope = "1"
-            stopOnStyle = "0">
+            scope = "0"
+            stopOnStyle = "1">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
