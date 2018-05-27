@@ -160,11 +160,16 @@
     return footerAttr;
 }
 
+- (void)reCalculateFrames
+{
+    [_framesArray removeAllObjects];
+    [self calculateFrames];
+}
+
 - (void)calculateFrames
 {
     if(_framesArray.count > 0){
-//        return;
-        [_framesArray removeAllObjects];
+        return;
     }
     
     NSInteger sectionCount = self.collectionView.numberOfSections;

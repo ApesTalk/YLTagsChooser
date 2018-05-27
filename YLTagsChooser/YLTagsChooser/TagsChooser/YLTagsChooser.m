@@ -207,7 +207,7 @@ static CGFloat const kYGap = 10.f;
         tag.selected = NO;
         [_selectedTags removeObject:tag];
     }
-    
+
     [collectionView reloadData];
     //!!!!:Don't use this method! Should be optimized
 //    [collectionView reloadItemsAtIndexPaths:@[indexPath]];

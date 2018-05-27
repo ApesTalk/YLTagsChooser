@@ -19,5 +19,11 @@
 @property (nonatomic, weak) id<YLWaterFlowLayoutDelegate> delegate;
 @property (nonatomic, assign) CGFloat rowHeight;///< 固定行高
 
+/**
+ 如果你的数据源是会改变的，你应该在数据源发生改变后，先调用该方法刷新frames再调用reloadData。
+ Call this method when your datasource changed and then call UICollectionView's reloadData.
+ */
+- (void)reCalculateFrames;
+
 @end
 
