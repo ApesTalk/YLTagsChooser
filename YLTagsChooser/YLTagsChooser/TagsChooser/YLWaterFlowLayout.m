@@ -78,17 +78,26 @@
         if(currentSectionFrames.count == 0){
             //section header should show
             CGFloat y = section == 0 ? self.collectionView.contentInset.top : preSectionHeight;
-            [attributesArray addObject:[self headerAttri:[NSIndexPath indexPathForRow:0 inSection:section] withY:y]];
-
+            UICollectionViewLayoutAttributes *ha = [self headerAttri:[NSIndexPath indexPathForRow:0 inSection:section] withY:y];
+            if(ha){
+                [attributesArray addObject:ha];
+            }
+            
             //current section footer should show
             NSIndexPath *footerIndexPath = [NSIndexPath indexPathForRow:0 inSection:section];
             y = currentSectionHeight - self.footerReferenceSize.height;
-            [attributesArray addObject:[self footerAttri:footerIndexPath withY:y]];
+            UICollectionViewLayoutAttributes *fa = [self footerAttri:footerIndexPath withY:y];
+            if(fa){
+                [attributesArray addObject:fa];
+            }
             
             if(section > 0 && section + 1 < _framesArray.count &&
                y + self.footerReferenceSize.height <= visibleRect.origin.y + visibleRect.size.height){
                 //next section header should show
-                [attributesArray addObject:[self headerAttri:[NSIndexPath indexPathForRow:0 inSection:section + 1] withY:y + self.footerReferenceSize.height]];
+                UICollectionViewLayoutAttributes *ha = [self headerAttri:[NSIndexPath indexPathForRow:0 inSection:section + 1] withY:y + self.footerReferenceSize.height];
+                if(ha){
+                    [attributesArray addObject:ha];
+                }
             }
         }else{
             for(NSInteger row = 0; row < currentSectionFrames.count; row++){
@@ -100,7 +109,10 @@
                     if(row == 0){
                         //section header should show
                         CGFloat y = section == 0 ? self.collectionView.contentInset.top : preSectionHeight;
-                        [attributesArray addObject:[self headerAttri:currentIndexPath withY:y]];
+                        UICollectionViewLayoutAttributes *fa = [self headerAttri:currentIndexPath withY:y];
+                        if(fa){
+                            [attributesArray addObject:fa];
+                        }
                         
                         if(section > 0){
                             //pre section's footer should show
@@ -108,7 +120,10 @@
                             NSArray *preSectionFrames = _framesArray[preSection];
                             NSIndexPath *footerIndexPath = [NSIndexPath indexPathForRow:preSectionFrames.count inSection:preSection];
                             CGFloat y = preSectionHeight - self.footerReferenceSize.height;
-                            [attributesArray addObject:[self footerAttri:footerIndexPath withY:y]];
+                            UICollectionViewLayoutAttributes *fa = [self footerAttri:footerIndexPath withY:y];
+                            if(fa){
+                                [attributesArray addObject:fa];
+                            }
                         }
                     }
                     
@@ -123,13 +138,19 @@
                         //current section footer should show
                         NSIndexPath *footerIndexPath = [NSIndexPath indexPathForRow:currentSectionFrames.count inSection:section];
                         CGFloat y = currentSectionHeight - self.footerReferenceSize.height;
-                        [attributesArray addObject:[self footerAttri:footerIndexPath withY:y]];
+                        UICollectionViewLayoutAttributes *fa = [self footerAttri:footerIndexPath withY:y];
+                        if(fa){
+                            [attributesArray addObject:fa];
+                        }
                         
                         //next section header should show
                         NSInteger nextSection = section + 1;
                         if(nextSection < _framesArray.count){
                             NSIndexPath *headerIndexPath = [NSIndexPath indexPathForRow:0 inSection:nextSection];
-                            [attributesArray addObject:[self headerAttri:headerIndexPath withY:currentSectionHeight]];
+                            UICollectionViewLayoutAttributes *ha = [self headerAttri:headerIndexPath withY:currentSectionHeight];
+                            if(ha){
+                                [attributesArray addObject:ha];
+                            }
                         }
                     }
                 }
@@ -221,7 +242,7 @@
 {
     __block CGFloat height = 0;
     if(section >= 0 && _framesArray.count > section){
-        NSArray *sectionYArray = [_framesArray yl_objectAtIndex:section];
+        NSArray *sectionYArray = [_framesArray objectAtIndex:section];
         if(sectionYArray.count == 0){
             height = self.headerReferenceSize.height + self.sectionInset.top + self.sectionInset.bottom + self.footerReferenceSize.height;
             if(section == 0){
